@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JULIUS GAMES SP Z O O | Interactive Entertainment & Software Publishing</title>
+    <meta name="description" content="Independent software publishers and game development studio in Poland. Creators of next-gen digital experiences.">
+    <style>
+        /* DESIGN SYSTEM: NEXT-GEN GAME STUDIO */
+        :root {
+            --bg-base: #0a0a0c;         /* Deep Void Black */
+            --bg-panel: #121217;        /* Dark Surface */
+            --neon-red: #ff2a5f;        /* Cyber Red */
+            --neon-purple: #8a2be2;     /* Deep Purple */
+            --neon-blue: #00d2ff;       /* Tech Blue */
+            --text-main: #f8fafc;       /* Frost White */
+            --text-muted: #8b949e;      /* Muted Gray */
+            --border-glow: rgba(255, 42, 95, 0.3);
+            
+            --font-display: 'Rajdhani', 'Oswald', sans-serif;
+            --font-body: 'Inter', system-ui, sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-main);
+            background-color: var(--bg-base);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Game Engine Grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(0, 210, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 210, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -2;
+            pointer-events: none;
+            transform: perspective(500px) rotateX(60deg) scale(2);
+            transform-origin: top center;
+        }
+
+        /* Ambient Glows */
+        .glow-1 {
+            position: fixed;
+            top: -20vh; left: -10vw;
+            width: 50vw; height: 50vh;
+            background: radial-gradient(circle, rgba(255, 42, 95, 0.15) 0%, transparent 60%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .glow-2 {
+            position: fixed;
+            bottom: -20vh; right: -10vw;
+            width: 60vw; height: 60vh;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.1) 0%, transparent 60%);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Gamepad / Studio Logo Icon */
+        .logo-icon {
+            width: 32px; height: 32px;
+            background: var(--neon-red);
+            position: relative;
+            clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
+            box-shadow: 0 0 15px var(--neon-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-icon::after {
+            content: '';
+            width: 16px; height: 16px;
+            background: var(--bg-base);
+            border-radius: 50%;
+        }
+
+        .nav-links { display: flex; gap: 35px; font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;}
+        .nav-links a { text-decoration: none; color: var(--text-muted); transition: color 0.3s; }
+        .nav-links a:hover { color: var(--neon-red); }
+
+        .btn-nav {
+            background: transparent;
+            color: var(--neon-red) !important;
+            padding: 8px 24px;
+            border: 2px solid var(--neon-red);
+            border-radius: 4px;
+            transition: all 0.3s;
+            font-family: var(--font-code);
+        }
+        .btn-nav:hover { background: var(--neon-red); color: var(--bg-base) !important; box-shadow: 0 0 15px var(--border-glow); }
+
+        /* --- HERO SECTION --- */
+        header {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 140px 5% 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            font-family: var(--font-code);
+            background: rgba(255, 42, 95, 0.1);
+            color: var(--neon-red);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-glow);
+            letter-spacing: 1px;
+        }
+
+        header h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--neon-red), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            max-width: 550px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--neon-red);
+            color: var(--bg-base);
+            padding: 18px 40px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px 0 var(--neon-purple);
+        }
+
+        .btn-primary:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--neon-purple);
+        }
+
+        /* Abstract Console / Engine Graphic */
+        .hero-graphic {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .engine-panel {
+            width: 360px; height: 280px;
+            background: var(--bg-panel);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            position: relative;
+            z-index: 2;
+        }
+
+        .engine-panel::before {
+            content: ''; position: absolute; top: -2px; left: 10%; width: 40%; height: 2px;
+            background: var(--neon-red); box-shadow: 0 0 10px var(--neon-red);
+        }
+
+        .engine-screen {
+            flex: 1;
+            background: #000;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .engine-screen::after {
+            content: 'JULIUS_ENGINE_RUNTIME';
+            font-family: var(--font-code);
+            color: var(--neon-red);
+            font-size: 0.85rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .engine-controls {
+            display: flex; justify-content: space-between; margin-top: 20px;
+        }
+        .ctrl-bar { width: 40px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .ctrl-bar.active { background: var(--neon-blue); box-shadow: 0 0 8px var(--neon-blue); }
+
+        /* --- OPERATIONS GRID --- */
+        .section {
+            padding: 100px 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 2.8rem;
+            color: var(--text-main);
+            font-weight: 800;
+            text-transform: uppercase;
+            border-left: 5px solid var(--neon-red);
+            padding-left: 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: var(--bg-panel);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 40px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            position: relative;
+            border-top: 4px solid var(--bg-panel);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-top-color: var(--neon-red);
+            box-shadow: 0 10px 30px rgba(255, 42, 95, 0.1);
+        }
+
+        .card-icon {
+            font-family: var(--font-code);
+            font-size: 1.5rem;
+            color: var(--neon-red);
+            margin-bottom: 25px;
+            display: inline-block;
+            background: rgba(255, 42, 95, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+
+        .service-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            text-transform: uppercase;
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* --- APP PUBLISHER PROMO (CRITICAL FOR GOOGLE PLAY CONSOLE) --- */
+        .app-promo {
+            background: linear-gradient(135deg, var(--bg-panel) 0%, #050505 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 80px 5%;
+            margin: 60px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-promo::after {
+            content: '';
+            position: absolute;
+            right: -100px; bottom: -100px;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.1) 0%, transparent 60%);
+        }
+
+        .app-text h2 {
+            font-family: var(--font-display);
+            font-size: 3.2rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .app-list { list-style: none; margin: 30px 0; }
+        .app-list li {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            color: var(--text-muted);
+        }
+        .app-list li::before {
+            content: '>';
+            font-family: var(--font-code);
+            color: var(--neon-blue);
+            font-weight: bold;
+        }
+
+        /* Mobile Device Mockup for Software/Game Preview */
+        .mockup-phone {
+            width: 100%;
+            max-width: 320px;
+            height: 600px;
+            margin: 0 auto;
+            background: #000;
+            border: 4px solid #222;
+            border-radius: 35px;
+            padding: 15px;
+            box-shadow: 0 0 40px rgba(0, 210, 255, 0.15);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            z-index: 2;
+        }
+
+        .phone-screen {
+            flex: 1;
+            background: var(--bg-panel);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .ui-header {
+            padding: 20px;
+            background: rgba(0,0,0,0.6);
+            text-align: center;
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--neon-blue);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            letter-spacing: 2px;
+        }
+
+        .ui-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .game-banner {
+            height: 140px;
+            background: linear-gradient(45deg, #1e1b4b, #be185d);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.6rem;
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .ui-module {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .ui-module-title { font-family: var(--font-code); font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px; }
+        .ui-module-val { font-size: 1.1rem; font-weight: bold; color: var(--text-main); }
+
+        .ui-btn {
+            margin-top: auto;
+            background: var(--neon-blue);
+            color: var(--bg-base);
+            text-align: center;
+            padding: 15px;
+            font-family: var(--font-display);
+            font-weight: 900;
+            text-transform: uppercase;
+            border-radius: 4px;
+        }
+
+        /* --- VERIFICATION REGISTRY (EXACT D&B MATCH) --- */
+        .registry-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 60px;
+        }
+
+        .data-panel {
+            background: var(--bg-panel);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        .data-row {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed rgba(255,255,255,0.05);
+        }
+        .data-row:last-child { border: none; margin: 0; padding: 0; }
+
+        .data-label {
+            font-family: var(--font-code);
+            font-size: 0.75rem;
+            color: var(--neon-red);
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .data-value {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 16px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            font-family: var(--font-body);
+            color: var(--text-main);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.1);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #050508;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 80px 5% 40px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+
+        .footer-col h4 {
+            color: var(--neon-red);
+            font-family: var(--font-display);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 12px; }
+        .footer-col a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        .footer-col a:hover { color: var(--text-main); }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: #475569;
+            font-family: var(--font-code);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 992px) {
+            .hero-grid, .app-promo, .registry-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .hero-graphic { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon"></div>
+            JULIUS GAMES
+        </div>
+        <div class="nav-links">
+            <a href="#services">Software Engineering</a>
+            <a href="#publishing">Digital Hub</a>
+            <a href="#registry">Corporate Data</a>
+            <a href="#contact" class="btn-nav">Client Support</a>
+        </div>
+    </nav>
+
+    <header>
+        <div class="hero-grid">
+            <div>
+                <div class="hero-tag">Software Publishers & Game Design</div>
+                <h1>Forging Digital <br><span class="text-gradient">Experiences</span>.</h1>
+                <p>JULIUS GAMES SP Z O O is an independent game development studio and software publisher based in Poland. We design, build, and distribute interactive media worldwide.</p>
+                <a href="#publishing" class="btn-primary">View Mobile Titles</a>
+            </div>
+            
+            <div class="hero-graphic">
+                <div class="engine-panel">
+                    <div class="engine-screen"></div>
+                    <div class="engine-controls">
+                        <div class="ctrl-bar active"></div>
+                        <div class="ctrl-bar active"></div>
+                        <div class="ctrl-bar"></div>
+                        <div class="ctrl-bar"></div>
+                        <div class="ctrl-bar active"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="services" class="section">
+        <div class="section-header">
+            <h2>Studio Operations</h2>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="card-icon">{PUB_API}</div>
+                <h3>Software Publishers</h3>
+                <p>Acting as verified Software Publishers, we manage the full lifecycle of our digital products, from conceptual design to global deployment on major app stores.</p>
+            </div>
+            <div class="service-card">
+                <div class="card-icon">&lt;DEV_CORE&gt;</div>
+                <h3>Computer Systems Design</h3>
+                <p>Providing specialized Computer Systems Design and Related Services, crafting the backend game engines and data processing architectures that power our titles.</p>
+            </div>
+            <div class="service-card">
+                <div class="card-icon">[PKG_GAME]</div>
+                <h3>Prepackaged Software</h3>
+                <p>Developing robust, standalone Prepackaged Software and interactive entertainment applications optimized for seamless installation and high performance on mobile devices.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="publishing" class="section" style="padding-top: 0;">
+        <div class="app-promo">
+            <div class="app-text">
+                <div class="hero-tag" style="border-color: var(--neon-blue); color: var(--neon-blue);">Google Play Developer Account</div>
+                <h2>Mobile Publishing Hub</h2>
+                <p style="font-size: 1.15rem; color: var(--text-main); margin-bottom: 15px; font-weight: 600;">
+                    As an official Software Publisher, <strong>JULIUS GAMES SP Z O O develops and distributes our prepackaged interactive software directly via mobile app stores.</strong>
+                </p>
+                <p style="color: var(--text-muted); line-height: 1.7;">
+                    The Google Play ecosystem is the primary distribution channel for our digital entertainment products. Our published catalog includes mobile games, interactive media, and proprietary software applications designed for players across the globe.
+                </p>
+                
+                <ul class="app-list">
+                    <li>Direct distribution of internally developed mobile games.</li>
+                    <li>Secure in-app purchases and digital licensing verification.</li>
+                    <li>Over-the-air content updates for prepackaged gaming software.</li>
+                    <li>Integration with Google Play Games services for leaderboards.</li>
+                </ul>
+            </div>
+            
+            <div class="mockup-phone">
+                <div class="phone-screen">
+                    <div class="ui-header">JULIUS_STORE</div>
+                    <div class="ui-content">
+                        
+                        <div class="game-banner">
+                            CYBER DRIFT
+                        </div>
+
+                        <div class="ui-module" style="border-color: var(--neon-blue);">
+                            <div class="ui-module-title">PUBLISHER</div>
+                            <div class="ui-module-val" style="color: var(--neon-blue);">Julius Games Sp. z o.o.</div>
+                        </div>
+
+                        <div class="ui-module">
+                            <div class="ui-module-title">LATEST PATCH</div>
+                            <div class="ui-module-val">v3.0.1 - Engine Update</div>
+                        </div>
+
+                        <div class="ui-btn">PLAY NOW</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="registry" class="section">
+        <div class="section-header">
+            <h2>Corporate Database Registry</h2>
+        </div>
+        <div class="registry-grid">
+            
+            <div class="data-panel">
+                <div class="data-row">
+                    <span class="data-label">Legal Entity Name</span>
+                    <span class="data-value">JULIUS GAMES SP Z O O</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Key Principal</span>
+                    <span class="data-value">Juliusz Jacek Pielak</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Industry Classification Profile</span>
+                    <span class="data-value" style="font-size: 0.95rem; line-height: 1.6;">
+                        • Software Publishers<br>
+                        • Computer Systems Design and Related Services<br>
+                        • Information / Media Streaming<br>
+                        • Prepackaged Software / Games
+                    </span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Country of Registration</span>
+                    <span class="data-value" style="font-size: 0.95rem;">
+                        Poland
+                    </span>
+                </div>
+                <div class="data-row" style="border: none;">
+                    <span class="data-label">Official Developer Endpoint</span>
+                    <span class="data-value" style="color: var(--neon-red);">info@juliusgames.cloud</span>
+                </div>
+            </div>
+
+            <div id="contact">
+                <h3 style="font-family: var(--font-display); font-size: 1.8rem; margin-bottom: 20px; text-transform: uppercase;">Software Support</h3>
+                <p style="color: var(--text-muted); margin-bottom: 30px;">Contact our publishing team to inquire about our prepackaged software, report in-game bugs, or request technical assistance with our published mobile applications.</p>
+                
+                <form onsubmit="event.preventDefault();">
+                    <input type="text" placeholder="Player Name / License ID" required>
+                    <input type="email" placeholder="Contact Email Address" required>
+                    <textarea placeholder="Describe your software inquiry or support request..." rows="5" required></textarea>
+                    <button type="submit" class="btn-primary" style="width: 100%; border: none; cursor: pointer; box-shadow: none;">Submit Transmission</button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 20px;">
+                    <div class="logo-icon" style="width: 24px; height: 24px;"></div>
+                    JULIUS GAMES
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Architecting, designing, and publishing cutting-edge prepackaged software and interactive entertainment in Poland.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Digital Platforms</h4>
+                <ul>
+                    <li><a href="#">Google Play Publisher Status</a></li>
+                    <li><a href="#">Report Software Bug</a></li>
+                    <li><a href="#" style="color: var(--text-main); font-weight: bold;">Request Account & Data Deletion</a></li>
+                    <li><a href="#">Game Server Status</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Legal & Compliance</h4>
+                <ul>
+                    <li><a href="#">End User License Agreement (EULA)</a></li>
+                    <li><a href="#">Software Publishing Terms</a></li>
+                    <li><a href="#">Privacy Policy (GDPR)</a></li>
+                    <li><a href="#">In-App Purchase Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 JULIUS GAMES SP Z O O. Registered in Poland. Systems Operational.
+        </div>
+    </footer>
+
+</body>
+</html>
